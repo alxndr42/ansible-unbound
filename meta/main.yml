@@ -1,0 +1,15 @@
+galaxy_info:
+  role_name: unbound
+  author: Alexander Dietrich
+  description: Installs Unbound on Debian-based systems.
+  license: GPL-3.0-or-later
+  min_ansible_version: 2.10
+  platforms:
+    - name: Debian
+      versions: [all]
+    - name: Ubuntu
+      versions: [all]
+  galaxy_tags:
+    - debian
+    - ubuntu
+    - unbound

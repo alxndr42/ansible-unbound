@@ -1,0 +1,24 @@
+---
+- name: download unbound_exporter
+  get_url:
+    url: "{{ unbound_exporter_url }}"
+    dest: /opt/.unbound_exporter.deb
+    checksum: sha256:{{ unbound_exporter_sha256 }}
+  register: unbound_exporter
+
+- name: install unbound_exporter
+  apt:
+    deb: /opt/.unbound_exporter.deb
+  when: unbound_exporter.changed
+
+- name: template service
+  template:
+    src: unbound_exporter.service
+    dest: /etc/systemd/system/
+  notify: restart exporter
+
+- name: enable service
+  systemd:
+    name: unbound_exporter
+    enabled: yes
+    daemon_reload: yes

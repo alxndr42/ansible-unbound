@@ -1,0 +1,15 @@
+[Unit]
+Description=Prometheus unbound_exporter
+After=syslog.target network.target
+
+[Service]
+ExecStart=/usr/bin/unbound_exporter \
+    -unbound.ca /etc/unbound/unbound_server.pem \
+    -unbound.cert /etc/unbound/unbound_control.pem \
+    -unbound.key /etc/unbound/unbound_control.key \
+    -web.listen-address {{ unbound_exporter_address }}
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
