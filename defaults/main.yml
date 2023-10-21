@@ -17,5 +17,5 @@ unbound_access_control:
   - "0.0.0.0/0 allow"
   - "::0/0 allow"
 # unbound exporter settings
-unbound_exporter_url: https://github.com/letsencrypt/unbound_exporter/releases/download/v0.4.1/unbound_exporter-v0.4.1.x86_64.deb
-unbound_exporter_sha256: "ab7cb36ddcd605dc870e1b61ce56fdd2686d29769efcf4b9c25898359423f733"
+unbound_exporter_url: https://github.com/letsencrypt/unbound_exporter/releases/download/v0.4.2/unbound_exporter-v0.4.2.x86_64.deb
+unbound_exporter_sha256: "da76898744982b6569cd76749c65965ecc8ce7c1e986997c61317205c98ece4b"

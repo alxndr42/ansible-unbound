@@ -4,9 +4,13 @@ After=syslog.target network.target
 
 [Service]
 ExecStart=/usr/bin/unbound_exporter \
+{% if remote_control_conf.stat.exists %}
+    -unbound.host unix:///run/unbound.ctl \
+{% else %}
     -unbound.ca /etc/unbound/unbound_server.pem \
     -unbound.cert /etc/unbound/unbound_control.pem \
     -unbound.key /etc/unbound/unbound_control.key \
+{% endif %}
     -web.listen-address {{ unbound_exporter_address }}
 Restart=on-failure
 RestartSec=30

@@ -4,18 +4,28 @@
     name: unbound
     cache_valid_time: 86400
 
-- name: copy static configuration
-  copy:
-    src: "{{ item }}"
-    dest: /etc/unbound/unbound.conf.d/
-  with_items:
-    - control-enable.conf
-    - extended-statistics.conf
-  notify: restart unbound
+# Debian 12 changed the remote control socket from TCP to UNIX ¯\_(ツ)_/¯
+- name: check for remote-control.conf
+  stat: path=/etc/unbound/unbound.conf.d/remote-control.conf
+  register: remote_control_conf
 
-- name: template performance.conf
-  template:
-    src: performance.conf
+- name: copy control-enable.conf
+  copy:
+    src: control-enable.conf
+    dest: /etc/unbound/unbound.conf.d/
+  notify: restart unbound
+  when: not remote_control_conf.stat.exists
+
+- name: remove control-enable.conf
+  file:
+    path: control-enable.conf
+    state: absent
+  notify: restart unbound
+  when: remote_control_conf.stat.exists
+
+- name: copy extended-statistics.conf
+  copy:
+    src: extended-statistics.conf
     dest: /etc/unbound/unbound.conf.d/
   notify: restart unbound
 
@@ -25,6 +35,12 @@
     dest: /etc/unbound/unbound.conf.d/
   notify: restart unbound
   when: unbound_tls_service_crt is defined
+
+- name: template performance.conf
+  template:
+    src: performance.conf
+    dest: /etc/unbound/unbound.conf.d/
+  notify: restart unbound
 
 - include_tasks: install-exporter.yml
   when: unbound_exporter_address is defined
